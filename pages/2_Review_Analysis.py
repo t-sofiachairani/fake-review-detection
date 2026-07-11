@@ -1,0 +1,25 @@
+import streamlit as st
+
+from utils.data import load_data
+from utils.ui import prediction_notice, setup_page
+
+
+setup_page("Review Analysis", "Review explorer")
+df = load_data()
+c1, c2, c3 = st.columns([1, 1, 2])
+status = c1.selectbox("Prediction", ["Semua Review", "Fake", "Original"])
+rating = c2.selectbox("Rating", ["Semua"] + [1, 2, 3, 4, 5])
+query = c3.text_input("Cari review", placeholder="Ketik kata atau frasa...")
+
+filtered = df.copy()
+if status != "Semua Review": filtered = filtered[filtered["prediction"].eq(status)]
+if rating != "Semua": filtered = filtered[filtered["rating_star"].eq(rating)]
+if query: filtered = filtered[filtered["comment"].str.contains(query, case=False, na=False)]
+
+st.caption(f"Menampilkan {len(filtered):,} review")
+table = filtered[["comment", "rating_star", "prediction", "confidence"]].rename(columns={
+    "comment": "Review", "rating_star": "Rating", "prediction": "Prediction", "confidence": "Confidence"
+})
+table["Confidence"] = table["Confidence"].map(lambda x: f"{x:.0%}")
+st.dataframe(table, use_container_width=True, hide_index=True, height=560)
+prediction_notice(df)

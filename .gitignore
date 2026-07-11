@@ -1,0 +1,25 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Streamlit and local secrets
+.streamlit/secrets.toml
+.env
+.env.*
+
+# Notebook/editor state
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# Local Codex metadata
+.agents/
+.codex/
+
+# OS files
+.DS_Store
+Thumbs.db
