@@ -5,7 +5,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from utils.prediction import MODEL_PATH, VECTORIZER_PATH, predict_review
+from utils.prediction import MODEL_PATH, predict_dataframe
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,20 +27,20 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 @st.cache_data(show_spinner="Menyiapkan data review...")
 def load_data(path: str = str(DATA_PATH)) -> pd.DataFrame:
     df = clean_data(pd.read_csv(path, low_memory=False))
+    if MODEL_PATH.exists():
+        return predict_dataframe(df)
+
     label_col = next((c for c in ["fakeornot", "prediction"] if c in df.columns), None)
-    if label_col and not (MODEL_PATH.exists() and VECTORIZER_PATH.exists()):
+    if label_col:
         fake_values = {"1", "fake", "fake indicator", "true"}
         df["prediction"] = df[label_col].astype(str).str.lower().map(
             lambda value: "Fake" if value in fake_values else "Original"
         )
         df["confidence"] = 1.0
         df["prediction_source"] = "dataset"
-    else:
-        predictions = df["comment"].map(predict_review)
-        df[["prediction", "confidence", "prediction_source"]] = pd.DataFrame(
-            predictions.tolist(), index=df.index
-        )
-    return df
+        return df
+
+    return predict_dataframe(df)
 
 
 def calculate_metrics(df: pd.DataFrame) -> dict[str, float]:

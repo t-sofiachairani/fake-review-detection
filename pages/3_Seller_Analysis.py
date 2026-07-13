@@ -1,13 +1,14 @@
 import streamlit as st
 
 from utils.data import filter_seller, load_data
-from utils.ui import ORANGE, prediction_notice, setup_page
+from utils.ui import prediction_notice, setup_page
 
 
 setup_page("Seller Analysis", "Risk overview")
 df = load_data()
 seller_ids = sorted(df["shop_id"].dropna().astype(str).unique())
-selected = st.sidebar.selectbox("Pilih seller", seller_ids)
+picker_col, _ = st.columns([1.4, 3])
+selected = picker_col.selectbox("Pilih seller", seller_ids)
 seller = filter_seller(df, selected)
 ratio = seller["prediction"].eq("Fake").mean() * 100
 

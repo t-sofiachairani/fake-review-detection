@@ -1,7 +1,7 @@
 import streamlit as st
 
 from utils.data import load_data
-from utils.ui import prediction_notice, setup_page
+from utils.ui import page_bounds, page_controls, prediction_notice, setup_page
 
 
 setup_page("Review Analysis", "Review explorer")
@@ -21,5 +21,7 @@ table = filtered[["comment", "rating_star", "prediction", "confidence"]].rename(
     "comment": "Review", "rating_star": "Rating", "prediction": "Prediction", "confidence": "Confidence"
 })
 table["Confidence"] = table["Confidence"].map(lambda x: f"{x:.0%}")
-st.dataframe(table, use_container_width=True, hide_index=True, height=560)
+start, end = page_bounds(len(table), key="review", page_size=20)
+st.dataframe(table.iloc[start:end], use_container_width=True, hide_index=True, height=560)
+page_controls(len(table), key="review", page_size=20)
 prediction_notice(df)
