@@ -100,7 +100,10 @@ html, body, [class*="css"] {font-family:'DM Sans',sans-serif; color:var(--ink)}
   line-height:1; vertical-align:-4px; -webkit-font-feature-settings:'liga'; font-feature-settings:'liga'}
 .msi.lg {font-size:44px}
 .topnav {display:flex; align-items:center; gap:4px; flex-wrap:wrap; padding:2px 0 6px}
-[data-testid="stPageLink"] a {border-radius:10px; padding:7px 12px; color:var(--muted); font-weight:600}
+[data-testid="stPageLink"] {min-width:0}
+[data-testid="stPageLink"] a {width:100%; box-sizing:border-box; justify-content:center;
+  border-radius:10px; padding:7px 6px; color:var(--muted); font-size:14px;
+  font-weight:600; white-space:nowrap}
 [data-testid="stPageLink"] a:hover {background:var(--surface-2); color:var(--ink)}
 .nav-user {display:flex; align-items:center; justify-content:flex-end; gap:6px; min-height:40px;
   color:var(--ink); font-weight:600; white-space:nowrap; line-height:1}
