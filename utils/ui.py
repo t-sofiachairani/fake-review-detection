@@ -168,6 +168,13 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
 .product-meta {height:26px; color:var(--muted-2); font-size:13px; display:flex; align-items:center}
 .prod-thumb {height:165px; border-radius:12px; background:linear-gradient(135deg,var(--brand-tint),var(--surface-2));
   display:flex; align-items:center; justify-content:center; font-size:52px}
+.product-image-placeholder {min-height:340px; border:1px solid var(--border); border-radius:20px;
+  background:linear-gradient(145deg,var(--surface),var(--surface-2)); display:flex;
+  flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:28px;
+  box-sizing:border-box; text-align:center; box-shadow:var(--shadow-sm)}
+.product-image-placeholder .msi {font-size:54px; color:var(--muted-2); vertical-align:0}
+.product-image-placeholder .placeholder-label {font-size:15px; line-height:1.45;
+  font-weight:600; color:var(--muted)}
 .trust-row {height:42px; box-sizing:border-box; color:var(--brand-ink); padding:10px 2px;
   border-top:1px solid var(--border); font-size:12px; font-weight:700; display:flex;
   align-items:center; justify-content:space-between}

@@ -53,9 +53,10 @@ st.markdown('<div style="height:12px"></div>', unsafe_allow_html=True)
 image_col, info_col = st.columns([1, 1.7], gap="large")
 with image_col:
     st.markdown(
-        '<div class="prod-thumb" style="min-height:390px;flex-direction:column;color:var(--brand-ink)">'
-        f'{icon("image", "lg")}<b style="margin-top:8px">Gambar produk belum tersedia</b>'
-        '<span style="font-size:13px;color:var(--muted);margin-top:6px">Tambahkan kolom image_url untuk menampilkan gambar asli</span></div>',
+        '<div class="product-image-placeholder">'
+        f'{icon("image")}'
+        '<div class="placeholder-label">Foto produk belum tersedia</div>'
+        '</div>',
         unsafe_allow_html=True,
     )
     st.markdown("#### Ringkasan kualitas review")
