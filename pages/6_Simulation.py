@@ -43,15 +43,19 @@ analyze = st.button("Analisis Review", type="primary", use_container_width=True)
 if analyze and not review_text.strip():
     st.info("Masukkan teks review terlebih dahulu.")
 elif analyze:
-    try:
-        detail = explain_review(review_text)
-        fake_probability = detail["fake_probability"]
-        signals = detail.get("top_signals", [])
-        source = "model"
-    except (ImportError, AttributeError, KeyError):
-        label_fallback, confidence, source = predict_review(review_text)
-        fake_probability = confidence if label_fallback == "Fake" else 1 - confidence
-        signals = []
+    with st.spinner("IndoBERT sedang menganalisis review..."):
+        try:
+            detail = explain_review(review_text)
+            fake_probability = detail["fake_probability"]
+            signals = detail.get("top_signals", [])
+            source = "model"
+        except (ImportError, AttributeError, KeyError):
+            label_fallback, confidence, source = predict_review(review_text)
+            fake_probability = confidence if label_fallback == "Fake" else 1 - confidence
+            signals = []
+        except Exception as exc:
+            st.error(f"Analisis gagal dijalankan: {exc}")
+            st.stop()
     st.session_state["sim_result"] = {
         "fake_probability": float(fake_probability),
         "signals": [[str(name), float(value)] for name, value in signals],
@@ -75,9 +79,9 @@ if result:
             f'<b>Hasil Analisis</b>'
             f'<span class="badge {badge_class}">{label}</span></div>'
             f'<div class="review-body" style="margin-top:12px;font-size:15px">'
-            f'Keyakinan model: <b>{confidence:.0%}</b></div>'
+            f'Keyakinan model: <b>{confidence:.1%}</b></div>'
             f'<div class="review-conf">Sumber: {escape(str(source))} · '
-            f'probabilitas fake {fake_probability:.0%}</div></div>',
+            f'probabilitas fake {fake_probability:.1%}</div></div>',
             unsafe_allow_html=True,
         )
         if label == "Fake":

@@ -10,6 +10,10 @@ def test_bundle_loads_with_recipe():
     bundle = load_bundle()
     assert bundle is not None
     assert bundle["recipe"] in {"tfidf_patterns", "indobert", "indobert_patterns"}
+    if bundle["recipe"] == "indobert":
+        assert bundle.get("embedding_text_col") == "comment"
+        assert "scaler" in bundle["artifacts"]
+        assert bundle["classifier"].__class__.__name__ == "CalibratedClassifierCV"
 
 
 def test_batch_predictions_have_contract_columns():

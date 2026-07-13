@@ -21,7 +21,9 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     df["product_title"] = df.get("product_title", "Produk tanpa nama").fillna("Produk tanpa nama")
     df["rating_star"] = pd.to_numeric(df.get("rating_star", 0), errors="coerce")
     df["ctime"] = pd.to_datetime(df.get("ctime"), unit="s", errors="coerce")
-    return df[df["item_id"].notna() & df["shop_id"].notna()].reset_index(drop=True)
+    has_review = df["comment"].str.strip().ne("")
+    valid = df["item_id"].notna() & df["shop_id"].notna() & has_review
+    return df.loc[valid].reset_index(drop=True)
 
 
 @st.cache_data(show_spinner="Menyiapkan data review...")

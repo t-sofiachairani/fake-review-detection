@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from functools import lru_cache
 from pathlib import Path
 
 import joblib
@@ -49,19 +50,28 @@ def _attach_features(bundle: dict, df: pd.DataFrame) -> pd.DataFrame:
     return frame
 
 
-def _embeddings_for(bundle: dict, cleaned_texts: list[str]) -> np.ndarray | None:
+@lru_cache(maxsize=2)
+def _get_embedder(model_name: str):
+    """Keep the heavy IndoBERT model in memory across Streamlit reruns."""
+    from utils.embeddings import IndoBertEmbedder
+
+    return IndoBertEmbedder(model_name)
+
+
+def _embeddings_for(bundle: dict, texts: list[str]) -> np.ndarray | None:
     if not bundle.get("uses_bert"):
         return None
     from utils.embeddings import embedding_key, load_cache
 
     cache = load_cache()
-    keys = [embedding_key(bundle["model_name"], text) for text in cleaned_texts]
+    texts = [str(text) for text in texts]
+    keys = [embedding_key(bundle["model_name"], text) for text in texts]
     missing = [key not in cache for key in keys]
     if any(missing):
-        from utils.embeddings import IndoBertEmbedder, embed_with_cache, save_cache
+        from utils.embeddings import embed_with_cache, save_cache
 
-        embedder = IndoBertEmbedder(bundle["model_name"])
-        _, cache = embed_with_cache(cleaned_texts, embedder, cache)
+        embedder = _get_embedder(bundle["model_name"])
+        _, cache = embed_with_cache(texts, embedder, cache)
         save_cache(cache)
     return np.vstack([cache[key] for key in keys])
 
@@ -91,7 +101,8 @@ def predict_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         return result
 
     frame = _attach_features(bundle, result)
-    embeddings = _embeddings_for(bundle, frame["comment_clean"].tolist())
+    embedding_col = bundle.get("embedding_text_col", "comment_clean")
+    embeddings = _embeddings_for(bundle, frame[embedding_col].fillna("").tolist())
     labels, fake_proba = _score(bundle, frame, embeddings)
     label_map = bundle["label_map"]
     result["prediction"] = [label_map[int(label)] for label in labels]
@@ -108,7 +119,8 @@ def predict_review(text: object) -> tuple[str, float, str]:
         return label, confidence, "fallback"
 
     frame = _attach_features(bundle, pd.DataFrame({"comment": [text]}))
-    embeddings = _embeddings_for(bundle, frame["comment_clean"].tolist())
+    embedding_col = bundle.get("embedding_text_col", "comment_clean")
+    embeddings = _embeddings_for(bundle, frame[embedding_col].fillna("").tolist())
     labels, fake_proba = _score(bundle, frame, embeddings)
     label_int = int(labels[0])
     confidence = float(fake_proba[0] if label_int == 1 else 1 - fake_proba[0])
@@ -124,7 +136,8 @@ def explain_review(text: object) -> dict:
         fake_probability = confidence if label == "Fake" else 1 - confidence
     else:
         frame = _attach_features(bundle, pd.DataFrame({"comment": [text]}))
-        embeddings = _embeddings_for(bundle, frame["comment_clean"].tolist())
+        embedding_col = bundle.get("embedding_text_col", "comment_clean")
+        embeddings = _embeddings_for(bundle, frame[embedding_col].fillna("").tolist())
         _, fake_proba = _score(bundle, frame, embeddings)
         fake_probability = float(fake_proba[0])
 

@@ -36,7 +36,9 @@ def fit_recipe(recipe: str, frame, embeddings) -> dict:
     _require_embeddings(recipe, embeddings)
 
     if recipe == "indobert":
-        return {"recipe": recipe}
+        scaler = StandardScaler()
+        scaler.fit(np.asarray(embeddings, dtype=np.float64))
+        return {"recipe": recipe, "scaler": scaler}
 
     scaler = StandardScaler()
     scaler.fit(_pattern_block(frame))
@@ -55,7 +57,7 @@ def transform_recipe(artifacts: dict, frame, embeddings):
     embed = np.asarray(embeddings, dtype=np.float64)
 
     if recipe == "indobert":
-        return embed
+        return artifacts["scaler"].transform(embed)
 
     scaled = artifacts["scaler"].transform(_pattern_block(frame))
     return np.hstack([embed, scaled])

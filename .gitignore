@@ -13,6 +13,7 @@ __pycache__/
 
 # Notebook/editor state
 .ipynb_checkpoints/
+.jupyter/
 .vscode/
 .idea/
 

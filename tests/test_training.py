@@ -2,7 +2,9 @@ import numpy as np
 import pandas as pd
 
 from utils.features import add_text_features, add_user_features, fit_cosine_reference, max_cosine_similarity
+from utils.candidates import fit_recipe, transform_recipe
 from utils.training import cross_val_scores, make_classifier
+from utils.semi_supervised import select_balanced_pseudo_labels
 
 
 def _labeled_frame():
@@ -54,3 +56,31 @@ def test_make_classifier_recipe_specific():
     assert make_classifier("tfidf_patterns").__class__.__name__ == "RandomForestClassifier"
     assert make_classifier("indobert").__class__.__name__ == "LogisticRegression"
     assert make_classifier("indobert_patterns").__class__.__name__ == "LogisticRegression"
+
+
+def test_indobert_recipe_standardizes_embeddings():
+    frame, _ = _labeled_frame()
+    embeddings = np.arange(len(frame) * 6, dtype=float).reshape(len(frame), 6)
+    artifacts = fit_recipe("indobert", frame, embeddings)
+    transformed = transform_recipe(artifacts, frame, embeddings)
+    assert "scaler" in artifacts
+    assert np.allclose(transformed.mean(axis=0), 0.0)
+    assert np.allclose(transformed.std(axis=0), 1.0)
+
+
+def test_pseudo_labels_require_agreement_and_are_balanced():
+    rng = np.random.RandomState(42)
+    x_original = rng.normal(-2.0, 0.2, size=(20, 8))
+    x_fake = rng.normal(2.0, 0.2, size=(20, 8))
+    x_train = np.vstack([x_original, x_fake])
+    y_train = np.array([0] * 20 + [1] * 20)
+    x_pool = np.vstack([
+        rng.normal(-2.0, 0.2, size=(30, 8)),
+        rng.normal(2.0, 0.2, size=(30, 8)),
+    ])
+    selected = select_balanced_pseudo_labels(
+        x_train, y_train, x_pool, confidence_threshold=0.70, max_per_class=10
+    )
+    assert len(selected.labels) == 20
+    assert (selected.labels == 0).sum() == 10
+    assert (selected.labels == 1).sum() == 10

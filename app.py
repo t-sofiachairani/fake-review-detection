@@ -29,6 +29,7 @@ catalog = (
     )
     .sort_values(["total_review", "rating"], ascending=False)
 )
+catalog["ai_trust_score"] = ((1 - catalog["risk_ratio"]) * 100).round().astype(int)
 if query.strip():
     catalog = catalog[catalog["product_title"].str.contains(query.strip(), case=False, na=False)]
 
@@ -36,11 +37,18 @@ filter_col, result_col = st.columns([1.15, 4], gap="large")
 with filter_col:
     with st.container(border=True):
         st.markdown(f'<div style="font-size:1.05rem;font-weight:700;margin:0 0 6px">{icon("verified_user")} ShopAI Trust</div>', unsafe_allow_html=True)
-        st.caption("Saring berdasarkan indikator keamanan review")
-        max_risk = st.slider("Maksimum risiko", 0, 100, 100, format="%d%%")
+        st.caption("Saring berdasarkan AI Trust Score produk")
+        min_trust = st.slider(
+            "Minimum AI Trust Score",
+            0,
+            100,
+            0,
+            format="%d/100",
+            help="Hanya tampilkan produk dengan AI Trust Score sama dengan atau di atas batas ini.",
+        )
     st.caption("Indikator AI bukan keputusan absolut mengenai keaslian review.")
 
-catalog = catalog[catalog["risk_ratio"].le(max_risk / 100)]
+catalog = catalog[catalog["ai_trust_score"].ge(min_trust)]
 with result_col:
     top_left, top_right = st.columns([2, 1])
     top_left.markdown(f"### {'Hasil pencarian' if query else 'Produk populer'}")
@@ -65,7 +73,7 @@ with result_col:
                         f'<div class="product-meta">{icon("star")} {item["rating"]:.1f} · {item["total_review"]:,} review</div>',
                         unsafe_allow_html=True,
                     )
-                    score = round((1-item["risk_ratio"]) * 100)
+                    score = int(item["ai_trust_score"])
                     st.markdown(
                         f'<div class="trust-row"><span>{icon("shield")} AI TRUST SCORE</span><b>{score}</b></div>',
                         unsafe_allow_html=True,
