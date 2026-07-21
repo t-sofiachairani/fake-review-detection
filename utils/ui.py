@@ -8,6 +8,7 @@ re-paints the whole app. Plotly charts are themed via `apply_plotly_theme`.
 
 import base64
 import hashlib
+import re
 from functools import lru_cache
 from pathlib import Path
 
@@ -121,6 +122,7 @@ html, body, [class*="css"] {font-family:'DM Sans',sans-serif; color:var(--ink)}
 .nav-user {display:flex; align-items:center; justify-content:flex-end; gap:6px; min-height:40px;
   color:var(--ink); font-weight:600; white-space:nowrap; line-height:1}
 .nav-user .msi {color:var(--muted); font-size:22px; vertical-align:0}
+.brand-logo {display:block; width:180px; max-width:100%; height:auto}
 .stApp {background:var(--bg); color:var(--ink)}
 [data-testid="stSidebar"], [data-testid="collapsedControl"] {display:none !important}
 [data-testid="stHeader"] {display:none}
@@ -256,12 +258,31 @@ def product_image(item_id: object, shop_id: object, detail: bool = False) -> str
     )
 
 
+@lru_cache(maxsize=1)
+def trustee_logo() -> str:
+    """Return the vector logo with its exported white canvas removed."""
+    svg = LOGO_PATH.read_text(encoding="utf-8")
+    svg = re.sub(
+        r'<g clip-path="url\(#[^)]+\)"><path fill="#ffffff" '
+        r'd="M 0 0\.0546875 L 531\.5 0\.0546875 L 531\.5 233\.945312 '
+        r'L 0 233\.945312 Z M 0 0\.0546875 "[^>]*/></g>',
+        "",
+        svg,
+        count=1,
+    )
+    encoded = base64.b64encode(svg.encode("utf-8")).decode("ascii")
+    return (
+        f'<img class="brand-logo" src="data:image/svg+xml;base64,{encoded}" '
+        f'alt="Trustee — Trusted Review Intelligence">'
+    )
+
+
 def _top_bar(eyebrow_text: str, icon_name: str) -> None:
     brand_col, nav_col, account_col, toggle_col = st.columns(
         [1.3, 4.2, 0.8, 1.0], vertical_alignment="center"
     )
     with brand_col:
-        st.image(str(LOGO_PATH), width=180)
+        st.markdown(trustee_logo(), unsafe_allow_html=True)
     with nav_col:
         cols = st.columns(len(NAV_ITEMS))
         for col, (path, label, _) in zip(cols, NAV_ITEMS):
