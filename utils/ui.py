@@ -218,7 +218,7 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
   padding:16px 18px; margin:8px 0 14px; box-shadow:var(--shadow-sm)}
 .review-head {display:flex; justify-content:space-between; gap:12px; align-items:center}
 .review-head b {color:var(--ink)}
-.badge {padding:5px 11px; border-radius:99px; font-size:12px; font-weight:700}
+.badge {padding:5px 11px; border-radius:99px; font-size:12px; font-weight:700; white-space:nowrap}
 .badge-fake {background:var(--danger-bg); color:var(--danger-ink)}
 .badge-ok {background:var(--ok-bg); color:var(--ok-ink)}
 .review-stars {color:#fbbf24; margin:8px 0}
@@ -267,6 +267,11 @@ NAV_ITEMS = (
     ("pages/6_Simulation.py", "Simulasi", "science"),
 )
 
+PREDICTION_LABELS = {
+    "Original": "Tampak Wajar",
+    "Fake": "Perlu Ditinjau",
+}
+
 
 def setup_page(title: str, icon: str = "dashboard", show_eyebrow: bool = True) -> None:
     st.set_page_config(page_title=f"{title} · ShopAI", page_icon="🛍️", layout="wide")
@@ -278,6 +283,12 @@ def setup_page(title: str, icon: str = "dashboard", show_eyebrow: bool = True) -
 def icon(name: str, size: str = "") -> str:
     cls = f"msi {size}".strip()
     return f'<span class="{cls}">{name}</span>'
+
+
+def prediction_label(value: object) -> str:
+    """Return a cautious user-facing label for a technical model class."""
+    text = str(value)
+    return PREDICTION_LABELS.get(text, text)
 
 
 @lru_cache(maxsize=len(PRODUCT_IMAGE_PATHS))

@@ -13,6 +13,7 @@ from utils.ui import (
     chart_secondary,
     icon,
     marketplace_header,
+    prediction_label,
     prediction_notice,
     product_image,
     setup_page,
@@ -47,7 +48,7 @@ fake_pct = product["prediction"].eq("Fake").mean() * 100
 
 st.markdown('<div style="height:18px"></div>', unsafe_allow_html=True)
 with st.container(key="product_back"):
-    if st.button("← Kembali", type="tertiary", use_container_width=True):
+    if st.button("Kembali ke Marketplace", icon=":material/arrow_back:", type="tertiary"):
         st.switch_page("app.py")
 
 image_col, info_col = st.columns([1, 1.7], gap="large")
@@ -58,13 +59,17 @@ with image_col:
     )
     st.markdown("#### Ringkasan kualitas review")
     counts = product["prediction"].value_counts().rename_axis("Status").reset_index(name="Review")
+    counts["Status"] = counts["Status"].map(prediction_label)
     fig = px.pie(
         counts,
         values="Review",
         names="Status",
         hole=.62,
         color="Status",
-        color_discrete_map={"Fake": ORANGE, "Original": chart_secondary()},
+        color_discrete_map={
+            prediction_label("Fake"): ORANGE,
+            prediction_label("Original"): chart_secondary(),
+        },
     )
     fig.update_layout(
         height=280,
@@ -75,12 +80,12 @@ with image_col:
     st.plotly_chart(fig, width="stretch")
     original_col, fake_col = st.columns(2)
     original_col.markdown(
-        f'<div class="stat-box"><div class="k">Original</div>'
+        f'<div class="stat-box"><div class="k">{prediction_label("Original")}</div>'
         f'<div class="v">{100-fake_pct:.1f}%</div></div>',
         unsafe_allow_html=True,
     )
     fake_col.markdown(
-        f'<div class="stat-box"><div class="k">Fake</div>'
+        f'<div class="stat-box"><div class="k">{prediction_label("Fake")}</div>'
         f'<div class="v">{fake_pct:.1f}%</div></div>',
         unsafe_allow_html=True,
     )
@@ -108,8 +113,13 @@ with info_col:
     c2.button("Masukkan Keranjang", use_container_width=True, icon=":material/shopping_cart:")
 
 st.markdown("### Penilaian & review pembeli")
+st.caption("Label AI menunjukkan indikasi pola review dan bukan verifikasi mutlak atas keasliannya.")
 f1, f2, f3 = st.columns([1, 1, 2])
-status = f1.selectbox("Status AI", ["Semua", "Original", "Fake"])
+status = f1.selectbox(
+    "Status AI",
+    ["Semua", "Original", "Fake"],
+    format_func=lambda value: prediction_label(value),
+)
 rating = f2.selectbox("Rating", ["Semua", 5, 4, 3, 2, 1])
 search = f3.text_input("Cari di review", placeholder="Cari kata pada review produk ini...")
 
@@ -130,10 +140,10 @@ for row in reviews.head(100).itertuples():
     stars = "★" * int(row.rating_star) + "☆" * (5 - int(row.rating_star))
     st.markdown(
         f'<div class="review-card"><div class="review-head">'
-        f'<b>{username}</b><span class="badge {badge_class}">{row.prediction}</span></div>'
+        f'<b>{username}</b><span class="badge {badge_class}">AI · {prediction_label(row.prediction)}</span></div>'
         f'<div class="review-stars">{stars}</div>'
         f'<div class="review-body">{comment}</div>'
-        f'<div class="review-conf">Confidence {row.confidence:.0%}</div></div>',
+        f'<div class="review-conf">Keyakinan model {row.confidence:.0%}</div></div>',
         unsafe_allow_html=True,
     )
 prediction_notice(df)

@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from utils.prediction import explain_review, load_meta, predict_review
-from utils.ui import apply_plotly_theme, is_dark, setup_page
+from utils.ui import apply_plotly_theme, is_dark, prediction_label, setup_page
 
 
 setup_page("Simulasi Review", "Coba sendiri")
@@ -19,7 +19,7 @@ EXAMPLES = {
 st.markdown("## Simulasi Deteksi Review")
 st.caption(
     "Ketik atau tempel sebuah review, lalu ShopAI akan memperkirakan apakah polanya "
-    "menyerupai review asli atau palsu, beserta sinyal yang memengaruhinya."
+    "tampak wajar atau perlu ditinjau, beserta sinyal yang memengaruhinya."
 )
 
 if "sim_text" not in st.session_state:
@@ -69,6 +69,7 @@ if result:
     source = result["source"]
 
     label = "Fake" if fake_probability >= 0.5 else "Original"
+    display_label = prediction_label(label)
     confidence = fake_probability if label == "Fake" else 1 - fake_probability
     badge_class = "badge-fake" if label == "Fake" else "badge-ok"
 
@@ -77,17 +78,17 @@ if result:
         st.markdown(
             f'<div class="review-card"><div class="review-head">'
             f'<b>Hasil Analisis</b>'
-            f'<span class="badge {badge_class}">{label}</span></div>'
+            f'<span class="badge {badge_class}">AI · {display_label}</span></div>'
             f'<div class="review-body" style="margin-top:12px;font-size:15px">'
             f'Keyakinan model: <b>{confidence:.1%}</b></div>'
             f'<div class="review-conf">Sumber: {escape(str(source))} · '
-            f'probabilitas fake {fake_probability:.1%}</div></div>',
+            f'probabilitas risiko {fake_probability:.1%}</div></div>',
             unsafe_allow_html=True,
         )
         if label == "Fake":
-            st.warning("Pola review ini menyerupai karakteristik review palsu.")
+            st.warning("Pola review ini perlu ditinjau lebih lanjut.")
         else:
-            st.success("Pola review ini menyerupai review asli.")
+            st.success("Pola review ini tampak wajar menurut model.")
 
     with gauge_col:
         gauge = go.Figure(
@@ -95,7 +96,7 @@ if result:
                 mode="gauge+number",
                 value=fake_probability * 100,
                 number={"suffix": "%"},
-                title={"text": "Fake Probability"},
+                title={"text": "Probabilitas Risiko"},
                 gauge={
                     "axis": {"range": [0, 100]},
                     "bar": {"color": "#ee4d2d" if label == "Fake" else "#27364f"},
