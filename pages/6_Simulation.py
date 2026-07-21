@@ -4,7 +4,8 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from utils.prediction import explain_review, load_meta, predict_review
-from utils.ui import apply_plotly_theme, is_dark, prediction_label, setup_page
+from utils.labels import prediction_label
+from utils.ui import apply_plotly_theme, is_dark, setup_page
 
 
 setup_page("Simulasi Review", "Coba sendiri")

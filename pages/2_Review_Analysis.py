@@ -1,7 +1,8 @@
 import streamlit as st
 
 from utils.data import load_data
-from utils.ui import page_bounds, page_controls, prediction_label, prediction_notice, setup_page
+from utils.labels import prediction_label
+from utils.ui import page_bounds, page_controls, prediction_notice, setup_page
 
 
 setup_page("Review Analysis", "Review explorer")

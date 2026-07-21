@@ -267,12 +267,6 @@ NAV_ITEMS = (
     ("pages/6_Simulation.py", "Simulasi", "science"),
 )
 
-PREDICTION_LABELS = {
-    "Original": "Tampak Wajar",
-    "Fake": "Perlu Ditinjau",
-}
-
-
 def setup_page(title: str, icon: str = "dashboard", show_eyebrow: bool = True) -> None:
     st.set_page_config(page_title=f"{title} · ShopAI", page_icon="🛍️", layout="wide")
     st.session_state.setdefault("theme", "light")
@@ -283,12 +277,6 @@ def setup_page(title: str, icon: str = "dashboard", show_eyebrow: bool = True) -
 def icon(name: str, size: str = "") -> str:
     cls = f"msi {size}".strip()
     return f'<span class="{cls}">{name}</span>'
-
-
-def prediction_label(value: object) -> str:
-    """Return a cautious user-facing label for a technical model class."""
-    text = str(value)
-    return PREDICTION_LABELS.get(text, text)
 
 
 @lru_cache(maxsize=len(PRODUCT_IMAGE_PATHS))

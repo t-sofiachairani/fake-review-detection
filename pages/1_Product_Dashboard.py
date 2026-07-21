@@ -7,13 +7,13 @@ import pandas as pd
 import streamlit as st
 
 from utils.data import load_data
+from utils.labels import prediction_label
 from utils.ui import (
     ORANGE,
     apply_plotly_theme,
     chart_secondary,
     icon,
     marketplace_header,
-    prediction_label,
     prediction_notice,
     product_image,
     setup_page,
