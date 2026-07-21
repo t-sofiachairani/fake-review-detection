@@ -123,6 +123,7 @@ html, body, [class*="css"] {font-family:'DM Sans',sans-serif; color:var(--ink)}
   color:var(--ink); font-weight:600; white-space:nowrap; line-height:1}
 .nav-user .msi {color:var(--muted); font-size:22px; vertical-align:0}
 .brand-logo {display:block; width:130px; max-width:100%; height:auto}
+.brand-logo-dark {filter:brightness(0) invert(1)}
 .stApp {background:var(--bg); color:var(--ink)}
 [data-testid="stSidebar"], [data-testid="collapsedControl"] {display:none !important}
 [data-testid="stHeader"] {display:none}
@@ -311,8 +312,8 @@ def trust_score_tier(score: float) -> tuple[str, str]:
     return "risky", "Sangat Berisiko"
 
 
-@lru_cache(maxsize=1)
-def trustee_logo() -> str:
+@lru_cache(maxsize=2)
+def trustee_logo(dark: bool = False) -> str:
     """Return the vector logo with its exported white canvas removed."""
     svg = LOGO_PATH.read_text(encoding="utf-8")
     svg = re.sub(
@@ -324,8 +325,9 @@ def trustee_logo() -> str:
         count=1,
     )
     encoded = base64.b64encode(svg.encode("utf-8")).decode("ascii")
+    css_class = "brand-logo brand-logo-dark" if dark else "brand-logo"
     return (
-        f'<img class="brand-logo" src="data:image/svg+xml;base64,{encoded}" '
+        f'<img class="{css_class}" src="data:image/svg+xml;base64,{encoded}" '
         f'alt="Trustee — Trusted Review Intelligence">'
     )
 
@@ -336,7 +338,7 @@ def _top_bar(eyebrow_text: str, icon_name: str) -> None:
             [1.0, 4.5, 0.8, 1.0], vertical_alignment="center"
         )
         with brand_col:
-            st.markdown(trustee_logo(), unsafe_allow_html=True)
+            st.markdown(trustee_logo(is_dark()), unsafe_allow_html=True)
         with nav_col:
             cols = st.columns(len(NAV_ITEMS))
             for col, (path, label, _) in zip(cols, NAV_ITEMS):
