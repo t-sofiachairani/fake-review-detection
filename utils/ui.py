@@ -198,6 +198,17 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
 .trust-row {height:42px; box-sizing:border-box; color:var(--brand-ink); padding:10px 2px;
   border-top:1px solid var(--border); font-size:12px; font-weight:700; display:flex;
   align-items:center; justify-content:space-between}
+.trust-score {display:inline-flex; align-items:center; gap:6px; padding:4px 8px; border-radius:999px}
+.trust-score.trusted {background:#dcfce7; color:#15803d}
+.trust-score.review {background:#fef3c7; color:#b45309}
+.trust-score.suspicious {background:#ffedd5; color:#c2410c}
+.trust-score.risky {background:#fee2e2; color:#b91c1c}
+.trust-card {border-left:5px solid}
+.trust-card.trusted {background:#ecfdf5; border-color:#22a779; color:#166534}
+.trust-card.review {background:#fffbeb; border-color:#f59e0b; color:#92400e}
+.trust-card.suspicious {background:#fff7ed; border-color:#f97316; color:#9a3412}
+.trust-card.risky {background:#fef2f2; border-color:#dc382d; color:#991b1b}
+.trust-card.trusted span, .trust-card.review span, .trust-card.suspicious span, .trust-card.risky span {color:inherit}
 .stat-box {background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 14px}
 .stat-box .k {font-size:12px; color:var(--muted)}
 .stat-box .v {font-size:24px; font-weight:700; color:var(--ink)}
@@ -286,6 +297,17 @@ def product_image(item_id: object, shop_id: object, detail: bool = False) -> str
         f'<img class="{css_class}" src="{_image_data_uri(image_path)}" '
         f'alt="Foto produk" loading="lazy">'
     )
+
+
+def trust_score_tier(score: float) -> tuple[str, str]:
+    """Map a 0–100 AI Trust Score to its moderation tier."""
+    if score >= 80:
+        return "trusted", "Terpercaya"
+    if score >= 50:
+        return "review", "Perlu Ditinjau"
+    if score >= 20:
+        return "suspicious", "Mencurigakan"
+    return "risky", "Sangat Berisiko"
 
 
 @lru_cache(maxsize=1)

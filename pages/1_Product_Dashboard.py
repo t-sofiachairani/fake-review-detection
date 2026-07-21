@@ -16,6 +16,7 @@ from utils.ui import (
     prediction_notice,
     product_image,
     setup_page,
+    trust_score_tier,
 )
 
 
@@ -94,7 +95,13 @@ with info_col:
     st.write("Deskripsi, harga, stok, dan jumlah terjual belum tersedia pada dataset review.")
     c1, c2 = st.columns(2)
     trust_score = 100 - fake_pct
-    st.markdown(f'<div class="info-card"><b>{icon("shield")} Analisis Produk oleh ShopAI &nbsp; · &nbsp; Trust Score {trust_score:.0f}/100</b><br><span style="font-size:13px">Skor dihitung dari pola keseluruhan review pada produk ini.</span></div>', unsafe_allow_html=True)
+    score_class, score_label = trust_score_tier(trust_score)
+    st.markdown(
+        f'<div class="info-card trust-card {score_class}"><b>{icon("shield")} '
+        f'AI Trust Score {trust_score:.0f}/100 · {score_label}</b><br>'
+        f'<span style="font-size:13px">Skor dihitung dari pola keseluruhan review pada produk ini.</span></div>',
+        unsafe_allow_html=True,
+    )
     st.write("")
     c1, c2 = st.columns(2)
     c1.button("Beli Sekarang", use_container_width=True)
