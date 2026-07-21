@@ -5,7 +5,7 @@ import streamlit as st
 
 from utils.prediction import explain_review, load_meta, predict_review
 from utils.labels import prediction_label
-from utils.ui import apply_plotly_theme, is_dark, setup_page
+from utils.ui import apply_plotly_theme, icon, is_dark, setup_page
 
 
 setup_page("Simulasi Review", "Coba sendiri")
@@ -79,7 +79,7 @@ if result:
         st.markdown(
             f'<div class="review-card"><div class="review-head">'
             f'<b>Hasil Analisis</b>'
-            f'<span class="badge {badge_class}">AI - {display_label}</span></div>'
+            f'<span class="badge {badge_class}">{icon("smart_toy")} {display_label}</span></div>'
             f'<div class="review-body" style="margin-top:12px;font-size:15px">'
             f'Keyakinan model: <b>{confidence:.1%}</b></div>'
             f'<div class="review-conf">Sumber: {escape(str(source))} · '

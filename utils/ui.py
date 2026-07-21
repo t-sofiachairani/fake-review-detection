@@ -218,7 +218,9 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
   padding:16px 18px; margin:8px 0 14px; box-shadow:var(--shadow-sm)}
 .review-head {display:flex; justify-content:space-between; gap:12px; align-items:center}
 .review-head b {color:var(--ink)}
-.badge {padding:5px 11px; border-radius:99px; font-size:12px; font-weight:700; white-space:nowrap}
+.badge {display:inline-flex; align-items:center; gap:5px; padding:5px 11px; border-radius:99px;
+  font-size:12px; font-weight:700; white-space:nowrap}
+.badge .msi {font-size:15px; color:inherit; vertical-align:0}
 .badge-fake {background:var(--danger-bg); color:var(--danger-ink)}
 .badge-ok {background:var(--ok-bg); color:var(--ok-ink)}
 .review-stars {color:#fbbf24; margin:8px 0}
