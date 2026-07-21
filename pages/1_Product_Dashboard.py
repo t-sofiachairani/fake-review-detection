@@ -16,7 +16,6 @@ from utils.ui import (
     prediction_notice,
     product_image,
     setup_page,
-    trust_score_action,
     trust_score_tier,
 )
 
@@ -103,24 +102,10 @@ with info_col:
         f'<span style="font-size:13px">Skor dihitung dari pola keseluruhan review pada produk ini.</span></div>',
         unsafe_allow_html=True,
     )
-    alert_type, moderation_message, is_held = trust_score_action(trust_score)
-    if alert_type != "success":
-        getattr(st, alert_type)(moderation_message)
     st.write("")
     c1, c2 = st.columns(2)
-    c1.button(
-        "Ditahan Moderator" if is_held else "Beli Sekarang",
-        use_container_width=True,
-        disabled=is_held,
-        help="Pembelian dinonaktifkan selama produk ditinjau." if is_held else None,
-    )
-    c2.button(
-        "Masukkan Keranjang",
-        use_container_width=True,
-        icon=":material/shopping_cart:",
-        disabled=is_held,
-        help="Keranjang dinonaktifkan selama produk ditinjau." if is_held else None,
-    )
+    c1.button("Beli Sekarang", use_container_width=True)
+    c2.button("Masukkan Keranjang", use_container_width=True, icon=":material/shopping_cart:")
 
 st.markdown("### Penilaian & review pembeli")
 f1, f2, f3 = st.columns([1, 1, 2])

@@ -310,17 +310,6 @@ def trust_score_tier(score: float) -> tuple[str, str]:
     return "risky", "Sangat Berisiko"
 
 
-def trust_score_action(score: float) -> tuple[str, str, bool]:
-    """Return the UI notification and hold policy for a Trust Score."""
-    if score >= 80:
-        return "success", "Produk ditampilkan normal tanpa tindakan tambahan.", False
-    if score >= 50:
-        return "info", "Produk ditandai untuk peninjauan tim moderasi.", False
-    if score >= 20:
-        return "warning", "Notifikasi otomatis dibuat dan produk masuk antrean tinjauan prioritas tinggi.", False
-    return "error", "Produk ditahan sementara (hold) sampai ada keputusan moderator.", True
-
-
 @lru_cache(maxsize=1)
 def trustee_logo() -> str:
     """Return the vector logo with its exported white canvas removed."""
