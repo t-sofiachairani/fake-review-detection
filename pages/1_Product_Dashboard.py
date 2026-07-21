@@ -104,7 +104,8 @@ with info_col:
         unsafe_allow_html=True,
     )
     alert_type, moderation_message, is_held = trust_score_action(trust_score)
-    getattr(st, alert_type)(moderation_message)
+    if alert_type != "success":
+        getattr(st, alert_type)(moderation_message)
     st.write("")
     c1, c2 = st.columns(2)
     c1.button(
