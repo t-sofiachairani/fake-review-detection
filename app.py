@@ -88,7 +88,7 @@ with result_col:
                     score_class, score_label = trust_score_tier(score)
                     st.markdown(
                         f'<div class="trust-row"><span>{icon("shield")} AI TRUST SCORE</span>'
-                        f'<b class="trust-score {score_class}" title="{score_label}">{score}</b></div>',
+                        f'<b class="trust-score {score_class}">{score} · {score_label}</b></div>',
                         unsafe_allow_html=True,
                     )
                     if st.button("Lihat produk", key=f"open_{item['item_id']}_{item['shop_id']}", use_container_width=True):
