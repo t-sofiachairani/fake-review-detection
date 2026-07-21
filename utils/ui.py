@@ -122,7 +122,7 @@ html, body, [class*="css"] {font-family:'DM Sans',sans-serif; color:var(--ink)}
 .nav-user {display:flex; align-items:center; justify-content:flex-end; gap:6px; min-height:40px;
   color:var(--ink); font-weight:600; white-space:nowrap; line-height:1}
 .nav-user .msi {color:var(--muted); font-size:22px; vertical-align:0}
-.brand-logo {display:block; width:180px; max-width:100%; height:auto}
+.brand-logo {display:block; width:130px; max-width:100%; height:auto}
 .stApp {background:var(--bg); color:var(--ink)}
 [data-testid="stSidebar"], [data-testid="collapsedControl"] {display:none !important}
 [data-testid="stHeader"] {display:none}
@@ -279,7 +279,7 @@ def trustee_logo() -> str:
 
 def _top_bar(eyebrow_text: str, icon_name: str) -> None:
     brand_col, nav_col, account_col, toggle_col = st.columns(
-        [1.3, 4.2, 0.8, 1.0], vertical_alignment="center"
+        [1.0, 4.5, 0.8, 1.0], vertical_alignment="center"
     )
     with brand_col:
         st.markdown(trustee_logo(), unsafe_allow_html=True)
