@@ -5,7 +5,14 @@ from html import escape
 import streamlit as st
 
 from utils.data import load_data
-from utils.ui import icon, marketplace_header, page_bounds, page_controls, setup_page
+from utils.ui import (
+    icon,
+    marketplace_header,
+    page_bounds,
+    page_controls,
+    product_image,
+    setup_page,
+)
 
 
 setup_page("Marketplace", "AI-assisted shopping")
@@ -63,7 +70,10 @@ with result_col:
             columns = st.columns(3)
             for column, item in zip(columns, rows[row_start : row_start + 3]):
                 with column.container(border=True):
-                    st.markdown(f'<div class="prod-thumb">{icon("image", "lg")}</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        product_image(item["item_id"], item["shop_id"]),
+                        unsafe_allow_html=True,
+                    )
                     title = escape(str(item["product_title"]))
                     st.markdown(
                         f'<div class="product-title" title="{title}">{title}</div>',

@@ -14,6 +14,7 @@ from utils.ui import (
     icon,
     marketplace_header,
     prediction_notice,
+    product_image,
     setup_page,
 )
 
@@ -53,10 +54,7 @@ st.markdown('<div style="height:12px"></div>', unsafe_allow_html=True)
 image_col, info_col = st.columns([1, 1.7], gap="large")
 with image_col:
     st.markdown(
-        '<div class="product-image-placeholder">'
-        f'{icon("image")}'
-        '<div class="placeholder-label">Foto produk belum tersedia</div>'
-        '</div>',
+        product_image(selected_row["item_id"], selected_row["shop_id"], detail=True),
         unsafe_allow_html=True,
     )
     st.markdown("#### Ringkasan kualitas review")

@@ -6,6 +6,9 @@ variables (`var(--surface)`, `var(--ink)`, ...), so a single theme switch
 re-paints the whole app. Plotly charts are themed via `apply_plotly_theme`.
 """
 
+import base64
+import hashlib
+from functools import lru_cache
 from pathlib import Path
 
 import streamlit as st
@@ -16,6 +19,13 @@ ORANGE = "#ee4d2d"
 INK = "#172033"
 MUTED = "#687086"
 LOGO_PATH = Path(__file__).resolve().parent.parent / "Logo Trustee.svg"
+PRODUCT_IMAGE_PATHS = tuple(
+    Path(__file__).resolve().parent.parent / f"netflix {index}.{extension}"
+    for index, extension in (
+        (1, "png"), (2, "jpg"), (3, "png"), (4, "png"), (5, "jpg"),
+        (6, "png"), (7, "jpg"), (8, "jpg"), (9, "png"), (10, "jpg"),
+    )
+)
 
 # --- Design tokens ----------------------------------------------------------
 LIGHT = {
@@ -173,7 +183,9 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
   -webkit-box-orient:vertical; font-size:16px; font-weight:700; line-height:1.45; color:var(--ink); margin:8px 0 4px}
 .product-meta {height:26px; color:var(--muted-2); font-size:13px; display:flex; align-items:center}
 .prod-thumb {height:165px; border-radius:12px; background:linear-gradient(135deg,var(--brand-tint),var(--surface-2));
-  display:flex; align-items:center; justify-content:center; font-size:52px}
+  display:block; width:100%; object-fit:cover}
+.product-photo-detail {height:340px; border-radius:20px; display:block; width:100%;
+  object-fit:cover; box-shadow:var(--shadow-sm)}
 .product-image-placeholder {min-height:340px; border:1px solid var(--border); border-radius:20px;
   background:linear-gradient(145deg,var(--surface),var(--surface-2)); display:flex;
   flex-direction:column; align-items:center; justify-content:center; gap:14px; padding:28px;
@@ -223,6 +235,25 @@ def setup_page(title: str, icon: str = "dashboard", show_eyebrow: bool = True) -
 def icon(name: str, size: str = "") -> str:
     cls = f"msi {size}".strip()
     return f'<span class="{cls}">{name}</span>'
+
+
+@lru_cache(maxsize=len(PRODUCT_IMAGE_PATHS))
+def _image_data_uri(path: Path) -> str:
+    mime = "image/png" if path.suffix.lower() == ".png" else "image/jpeg"
+    encoded = base64.b64encode(path.read_bytes()).decode("ascii")
+    return f"data:{mime};base64,{encoded}"
+
+
+def product_image(item_id: object, shop_id: object, detail: bool = False) -> str:
+    """Return a stable, pseudo-random product image as an HTML element."""
+    product_key = f"{item_id}:{shop_id}".encode("utf-8")
+    image_index = int.from_bytes(hashlib.sha256(product_key).digest()[:4], "big")
+    image_path = PRODUCT_IMAGE_PATHS[image_index % len(PRODUCT_IMAGE_PATHS)]
+    css_class = "product-photo-detail" if detail else "prod-thumb"
+    return (
+        f'<img class="{css_class}" src="{_image_data_uri(image_path)}" '
+        f'alt="Foto produk" loading="lazy">'
+    )
 
 
 def _top_bar(eyebrow_text: str, icon_name: str) -> None:
