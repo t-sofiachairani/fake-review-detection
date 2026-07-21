@@ -45,11 +45,9 @@ title = str(selected_row["product_title"])
 fake_pct = product["prediction"].eq("Fake").mean() * 100
 
 st.markdown('<div style="height:18px"></div>', unsafe_allow_html=True)
-back_col, _ = st.columns([1, 6])
-with back_col:
+with st.container(key="product_back"):
     if st.button("← Kembali", type="tertiary", use_container_width=True):
         st.switch_page("app.py")
-st.markdown('<div style="height:12px"></div>', unsafe_allow_html=True)
 
 image_col, info_col = st.columns([1, 1.7], gap="large")
 with image_col:

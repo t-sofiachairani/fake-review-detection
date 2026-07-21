@@ -213,6 +213,31 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
 .review-stars {color:#fbbf24; margin:8px 0}
 .review-body {color:var(--ink)}
 .review-conf {color:var(--muted-2); font-size:12px; margin-top:10px}
+
+@media (max-width: 768px) {
+  .block-container {padding-top:.75rem}
+  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"] {
+    flex-wrap:wrap; gap:.45rem .75rem}
+  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]
+    > [data-testid="stColumn"]:nth-child(1),
+  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]
+    > [data-testid="stColumn"]:nth-child(2) {flex:0 0 100%; width:100%}
+  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]
+    > [data-testid="stColumn"]:nth-child(3),
+  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]
+    > [data-testid="stColumn"]:nth-child(4) {flex:1 1 calc(50% - .4rem); width:calc(50% - .4rem)}
+  .st-key-top_navigation [data-testid="stColumn"]:nth-child(2) [data-testid="stHorizontalBlock"] {
+    flex-wrap:nowrap; gap:.25rem; overflow-x:auto; scrollbar-width:none; padding-bottom:2px}
+  .st-key-top_navigation [data-testid="stColumn"]:nth-child(2) [data-testid="stHorizontalBlock"]::-webkit-scrollbar {display:none}
+  .st-key-top_navigation [data-testid="stColumn"]:nth-child(2) [data-testid="stHorizontalBlock"]
+    > [data-testid="stColumn"] {flex:0 0 auto; width:auto; min-width:max-content}
+  .st-key-top_navigation [data-testid="stPageLink"] a {padding:7px 10px}
+  .st-key-top_navigation .nav-user {justify-content:flex-start}
+  .st-key-top_navigation div.stButton > button {width:auto; padding-left:12px; padding-right:12px}
+  .brand-logo {width:112px}
+  .st-key-product_back {margin:.25rem 0 .5rem}
+  .st-key-product_back div.stButton > button {width:auto; padding-left:0; padding-right:10px}
+}
 </style>
 """
 
@@ -278,27 +303,28 @@ def trustee_logo() -> str:
 
 
 def _top_bar(eyebrow_text: str, icon_name: str) -> None:
-    brand_col, nav_col, account_col, toggle_col = st.columns(
-        [1.0, 4.5, 0.8, 1.0], vertical_alignment="center"
-    )
-    with brand_col:
-        st.markdown(trustee_logo(), unsafe_allow_html=True)
-    with nav_col:
-        cols = st.columns(len(NAV_ITEMS))
-        for col, (path, label, _) in zip(cols, NAV_ITEMS):
-            col.page_link(path, label=label)
-    with account_col:
-        st.markdown(
-            f'<div class="nav-user">{icon("account_circle")}<span>Budi</span></div>',
-            unsafe_allow_html=True,
+    with st.container(key="top_navigation"):
+        brand_col, nav_col, account_col, toggle_col = st.columns(
+            [1.0, 4.5, 0.8, 1.0], vertical_alignment="center"
         )
-    with toggle_col:
-        if is_dark():
-            clicked = st.button("Terang", icon=":material/light_mode:", type="tertiary",
-                                key="shopai_theme_toggle", use_container_width=True)
-        else:
-            clicked = st.button("Gelap", icon=":material/dark_mode:", type="tertiary",
-                                key="shopai_theme_toggle", use_container_width=True)
+        with brand_col:
+            st.markdown(trustee_logo(), unsafe_allow_html=True)
+        with nav_col:
+            cols = st.columns(len(NAV_ITEMS))
+            for col, (path, label, _) in zip(cols, NAV_ITEMS):
+                col.page_link(path, label=label)
+        with account_col:
+            st.markdown(
+                f'<div class="nav-user">{icon("account_circle")}<span>Budi</span></div>',
+                unsafe_allow_html=True,
+            )
+        with toggle_col:
+            if is_dark():
+                clicked = st.button("Terang", icon=":material/light_mode:", type="tertiary",
+                                    key="shopai_theme_toggle", use_container_width=True)
+            else:
+                clicked = st.button("Gelap", icon=":material/dark_mode:", type="tertiary",
+                                    key="shopai_theme_toggle", use_container_width=True)
     if clicked:
         st.session_state["theme"] = "light" if is_dark() else "dark"
         st.rerun()
