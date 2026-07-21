@@ -15,7 +15,7 @@ import streamlit as st
 ORANGE = "#ee4d2d"
 INK = "#172033"
 MUTED = "#687086"
-LOGO_PATH = Path(__file__).resolve().parent.parent / "Trustee Logo.png"
+LOGO_PATH = Path(__file__).resolve().parent.parent / "Logo Trustee.svg"
 
 # --- Design tokens ----------------------------------------------------------
 LIGHT = {
@@ -230,7 +230,7 @@ def _top_bar(eyebrow_text: str, icon_name: str) -> None:
         [1.3, 4.2, 0.8, 1.0], vertical_alignment="center"
     )
     with brand_col:
-        st.image(str(LOGO_PATH), width=180, output_format="PNG")
+        st.image(str(LOGO_PATH), width=180)
     with nav_col:
         cols = st.columns(len(NAV_ITEMS))
         for col, (path, label, _) in zip(cols, NAV_ITEMS):
