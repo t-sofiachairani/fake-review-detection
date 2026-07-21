@@ -79,9 +79,8 @@ if result:
         st.markdown(
             f'<div class="review-card"><div class="review-head">'
             f'<b>Hasil Analisis</b>'
-            f'<span class="badge {badge_class}">{icon("smart_toy")} {display_label}</span></div>'
-            f'<div class="review-body" style="margin-top:12px;font-size:15px">'
-            f'Keyakinan model: <b>{confidence:.1%}</b></div>'
+            f'<span class="badge {badge_class}" title="Keyakinan model">{icon("smart_toy")} '
+            f'{display_label} {confidence:.1%}</span></div>'
             f'<div class="review-conf">Sumber: {escape(str(source))} · '
             f'probabilitas risiko {fake_probability:.1%}</div></div>',
             unsafe_allow_html=True,

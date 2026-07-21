@@ -140,11 +140,11 @@ for row in reviews.head(100).itertuples():
     stars = "★" * int(row.rating_star) + "☆" * (5 - int(row.rating_star))
     st.markdown(
         f'<div class="review-card"><div class="review-head">'
-        f'<b>{username}</b><span class="badge {badge_class}">{icon("smart_toy")} '
-        f'{prediction_label(row.prediction)}</span></div>'
+        f'<b>{username}</b><span class="badge {badge_class}" title="Keyakinan model">'
+        f'{icon("smart_toy")} {prediction_label(row.prediction)} {row.confidence:.0%}</span></div>'
         f'<div class="review-stars">{stars}</div>'
         f'<div class="review-body">{comment}</div>'
-        f'<div class="review-conf">Keyakinan model {row.confidence:.0%}</div></div>',
+        f'</div>',
         unsafe_allow_html=True,
     )
 prediction_notice(df)
