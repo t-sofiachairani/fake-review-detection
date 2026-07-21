@@ -216,21 +216,26 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
 
 @media (max-width: 768px) {
   .block-container {padding-top:.75rem}
-  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"] {
-    flex-wrap:wrap; gap:.45rem .75rem}
-  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]
+  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo) {
+    flex-direction:row !important; flex-wrap:wrap !important; gap:.45rem .75rem !important}
+  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo)
     > [data-testid="stColumn"]:nth-child(1),
-  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]
-    > [data-testid="stColumn"]:nth-child(2) {flex:0 0 100%; width:100%}
-  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]
+  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo)
+    > [data-testid="stColumn"]:nth-child(2) {
+      flex:0 0 100% !important; width:100% !important; min-width:0 !important}
+  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo)
     > [data-testid="stColumn"]:nth-child(3),
-  .st-key-top_navigation > div > [data-testid="stVerticalBlock"] > [data-testid="stHorizontalBlock"]
-    > [data-testid="stColumn"]:nth-child(4) {flex:1 1 calc(50% - .4rem); width:calc(50% - .4rem)}
-  .st-key-top_navigation [data-testid="stColumn"]:nth-child(2) [data-testid="stHorizontalBlock"] {
-    flex-wrap:nowrap; gap:.25rem; overflow-x:auto; scrollbar-width:none; padding-bottom:2px}
-  .st-key-top_navigation [data-testid="stColumn"]:nth-child(2) [data-testid="stHorizontalBlock"]::-webkit-scrollbar {display:none}
-  .st-key-top_navigation [data-testid="stColumn"]:nth-child(2) [data-testid="stHorizontalBlock"]
-    > [data-testid="stColumn"] {flex:0 0 auto; width:auto; min-width:max-content}
+  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo)
+    > [data-testid="stColumn"]:nth-child(4) {
+      flex:1 1 calc(50% - .4rem) !important; width:calc(50% - .4rem) !important;
+      min-width:0 !important}
+  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has([data-testid="stPageLink"]) {
+    flex-direction:row !important; flex-wrap:nowrap !important; gap:.25rem !important;
+    overflow-x:auto; scrollbar-width:none; padding-bottom:2px}
+  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has([data-testid="stPageLink"])::-webkit-scrollbar {display:none}
+  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has([data-testid="stPageLink"])
+    > [data-testid="stColumn"] {
+      flex:0 0 auto !important; width:auto !important; min-width:max-content !important}
   .st-key-top_navigation [data-testid="stPageLink"] a {padding:7px 10px}
   .st-key-top_navigation .nav-user {justify-content:flex-start}
   .st-key-top_navigation div.stButton > button {width:auto; padding-left:12px; padding-right:12px}
