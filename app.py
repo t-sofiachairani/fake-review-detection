@@ -1,4 +1,4 @@
-"""Marketplace-style entry page for ShopAI."""
+"""Marketplace-style entry page for Trustee."""
 
 from html import escape
 
@@ -44,7 +44,7 @@ if query.strip():
 filter_col, result_col = st.columns([1.15, 4], gap="large")
 with filter_col:
     with st.container(border=True):
-        st.markdown(f'<div style="font-size:1.05rem;font-weight:700;margin:0 0 6px">{icon("verified_user")} ShopAI Trust</div>', unsafe_allow_html=True)
+        st.markdown(f'<div style="font-size:1.05rem;font-weight:700;margin:0 0 6px">{icon("verified_user")} Trustee Trust</div>', unsafe_allow_html=True)
         st.caption("Saring berdasarkan AI Trust Score produk")
         min_trust = st.slider(
             "Minimum AI Trust Score",

@@ -1,6 +1,6 @@
-# ShopAI — Fake Review Detection
+# Trustee — Fake Review Detection
 
-ShopAI adalah aplikasi analitik review marketplace berbasis **Streamlit** yang membantu pengguna mengenali pola review yang menyerupai review palsu. Model menggunakan representasi bahasa Indonesia dari **IndoBERT**, dilanjutkan dengan **Logistic Regression terkalibrasi** dan strategi semi-supervised berbasis kesepakatan dua teacher.
+Trustee adalah aplikasi analitik review marketplace berbasis **Streamlit** yang membantu pengguna mengenali pola review yang menyerupai review palsu. Model menggunakan representasi bahasa Indonesia dari **IndoBERT**, dilanjutkan dengan **Logistic Regression terkalibrasi** dan strategi semi-supervised berbasis kesepakatan dua teacher.
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://uc12-fakereview.streamlit.app)
 

@@ -91,7 +91,7 @@ with image_col:
     )
     st.caption("Indikator pola review, bukan keputusan absolut.")
 with info_col:
-    st.markdown('<span class="pill">PILIHAN SHOPAI</span>', unsafe_allow_html=True)
+    st.markdown('<span class="pill">PILIHAN TRUSTEE</span>', unsafe_allow_html=True)
     st.markdown(f"## {escape(title)}")
     st.markdown(f'<div style="font-size:1.35rem;font-weight:700;margin:2px 0 4px">{icon("star")} {product["rating_star"].mean():.2f} / 5</div>', unsafe_allow_html=True)
     st.caption(f"{len(product):,} review · {product['userid'].nunique():,} reviewer · Seller {selected_row['shop_id']}")

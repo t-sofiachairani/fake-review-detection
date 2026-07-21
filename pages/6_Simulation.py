@@ -19,7 +19,7 @@ EXAMPLES = {
 
 st.markdown("## Simulasi Deteksi Review")
 st.caption(
-    "Ketik atau tempel sebuah review, lalu ShopAI akan memperkirakan apakah polanya "
+    "Ketik atau tempel sebuah review, lalu Trustee akan memperkirakan apakah polanya "
     "tampak wajar atau perlu ditinjau, beserta sinyal yang memengaruhinya."
 )
 

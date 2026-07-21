@@ -1,1 +1,1 @@
-"""Shared helpers for the ShopAI dashboard."""
+"""Shared helpers for the Trustee dashboard."""

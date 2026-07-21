@@ -270,7 +270,7 @@ NAV_ITEMS = (
 )
 
 def setup_page(title: str, icon: str = "dashboard", show_eyebrow: bool = True) -> None:
-    st.set_page_config(page_title=f"{title} · ShopAI", page_icon="🛍️", layout="wide")
+    st.set_page_config(page_title=f"{title} · Trustee", page_icon="🛍️", layout="wide")
     st.session_state.setdefault("theme", "light")
     st.markdown(_root_vars() + _STYLE, unsafe_allow_html=True)
     _top_bar(title if show_eyebrow else "", icon if show_eyebrow else "")
@@ -349,10 +349,10 @@ def _top_bar(eyebrow_text: str, icon_name: str) -> None:
         with toggle_col:
             if is_dark():
                 clicked = st.button("Terang", icon=":material/light_mode:", type="tertiary",
-                                    key="shopai_theme_toggle", use_container_width=True)
+                                    key="trustee_theme_toggle", use_container_width=True)
             else:
                 clicked = st.button("Gelap", icon=":material/dark_mode:", type="tertiary",
-                                    key="shopai_theme_toggle", use_container_width=True)
+                                    key="trustee_theme_toggle", use_container_width=True)
     if clicked:
         st.session_state["theme"] = "light" if is_dark() else "dark"
         st.rerun()
