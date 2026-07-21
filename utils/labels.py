@@ -1,8 +1,8 @@
 """User-facing labels for technical model classes."""
 
 PREDICTION_LABELS = {
-    "Original": "Tampak Wajar",
-    "Fake": "Perlu Ditinjau",
+    "Original": "Original",
+    "Fake": "Fake",
 }
 
 
