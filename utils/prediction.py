@@ -150,5 +150,7 @@ def explain_review(text: object) -> dict:
         "user_review_per_day": float(row["user_review_per_day"]),
         "max_cosine_similarity": float(row["max_cosine_similarity"]),
     }
-    top_signals = sorted(signals.items(), key=lambda kv: abs(kv[1]), reverse=True)[:4]
+    # Return every descriptive signal. Comparing raw values and keeping only the
+    # largest four hid bounded ratios (0-1) behind count-valued signals.
+    top_signals = sorted(signals.items(), key=lambda kv: abs(kv[1]), reverse=True)
     return {"fake_probability": fake_probability, **signals, "top_signals": top_signals}

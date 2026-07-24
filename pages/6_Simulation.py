@@ -116,31 +116,43 @@ if result:
         st.plotly_chart(gauge, use_container_width=True)
 
     if signals:
-        st.markdown("#### Sinyal yang paling memengaruhi")
+        st.markdown("#### Karakteristik review")
         signal_labels = {
             "review_length": "Panjang review (kata)",
             "positive_word_ratio": "Rasio kata positif",
-            "repetition_score": "Skor repetisi kata",
+            "repetition_score": "Rasio repetisi kata",
             "user_review_count": "Jumlah review user",
             "user_review_per_day": "Review user per hari",
             "max_cosine_similarity": "Kemiripan dengan review lain",
         }
         names = [signal_labels.get(key, key) for key, _ in signals]
         values = [round(float(value), 3) for _, value in signals]
+        ratio_keys = {
+            "positive_word_ratio",
+            "repetition_score",
+            "max_cosine_similarity",
+        }
+        value_labels = [
+            f"{float(value):.1%}" if key in ratio_keys else f"{float(value):g}"
+            for key, value in signals
+        ]
         bar = go.Figure(
             go.Bar(
                 x=values,
                 y=names,
                 orientation="h",
+                text=value_labels,
+                textposition="outside",
+                cliponaxis=False,
                 marker_color="#ee4d2d" if is_dark() else "#27364f",
             )
         )
-        bar.update_layout(height=260, margin=dict(l=10, r=10, t=10, b=10))
+        bar.update_layout(height=330, margin=dict(l=10, r=55, t=10, b=10))
         apply_plotly_theme(bar)
         st.plotly_chart(bar, use_container_width=True)
         st.caption(
-            "Nilai sinyal bersifat deskriptif untuk transparansi, bukan bobot kepastian. "
-            "Kombinasi seluruh fitur menentukan prediksi akhir."
+            "Karakteristik ini bersifat deskriptif, bukan bobot pengaruh model. "
+            "Rasio ditampilkan sebagai persentase; panjang dan aktivitas berupa jumlah."
         )
 
 meta = load_meta()
