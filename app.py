@@ -59,7 +59,7 @@ with filter_col:
 catalog = catalog[catalog["ai_trust_score"].ge(min_trust)]
 with result_col:
     top_left, top_right = st.columns([2, 1])
-    top_left.markdown(f"### {'Hasil pencarian' if query else 'Produk populer'}")
+    top_left.markdown(f"### {'Hasil pencarian' if query else 'Produk'}")
     top_right.caption(f"{len(catalog):,} produk ditemukan")
 
     if catalog.empty:
