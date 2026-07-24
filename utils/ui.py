@@ -122,6 +122,7 @@ html, body, [class*="css"] {font-family:'DM Sans',sans-serif; color:var(--ink)}
 .nav-user {display:flex; align-items:center; justify-content:flex-end; gap:6px; min-height:40px;
   color:var(--ink); font-weight:600; white-space:nowrap; line-height:1}
 .nav-user .msi {color:var(--muted); font-size:22px; vertical-align:0}
+.st-key-mobile_navigation {display:none}
 .brand-logo {display:block; width:130px; max-width:100%; height:auto}
 .brand-logo-dark {filter:brightness(0) invert(1)}
 .stApp {background:var(--bg); color:var(--ink)}
@@ -233,24 +234,23 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
   .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo) {
     flex-direction:row !important; flex-wrap:wrap !important; gap:.45rem .75rem !important}
   .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo)
-    > [data-testid="stColumn"]:nth-child(1),
+    > [data-testid="stColumn"]:nth-child(1) {
+      flex:1 1 auto !important; width:auto !important; min-width:0 !important}
   .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo)
-    > [data-testid="stColumn"]:nth-child(2) {
-      flex:0 0 100% !important; width:100% !important; min-width:0 !important}
+    > [data-testid="stColumn"]:nth-child(2) {display:none !important}
   .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo)
     > [data-testid="stColumn"]:nth-child(3),
   .st-key-top_navigation [data-testid="stHorizontalBlock"]:has(.brand-logo)
     > [data-testid="stColumn"]:nth-child(4) {
       flex:1 1 calc(50% - .4rem) !important; width:calc(50% - .4rem) !important;
       min-width:0 !important}
-  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has([data-testid="stPageLink"]) {
-    flex-direction:row !important; flex-wrap:nowrap !important; gap:.25rem !important;
-    overflow-x:auto; scrollbar-width:none; padding-bottom:2px}
-  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has([data-testid="stPageLink"])::-webkit-scrollbar {display:none}
-  .st-key-top_navigation [data-testid="stHorizontalBlock"]:has([data-testid="stPageLink"])
-    > [data-testid="stColumn"] {
-      flex:0 0 auto !important; width:auto !important; min-width:max-content !important}
-  .st-key-top_navigation [data-testid="stPageLink"] a {padding:7px 10px}
+  .st-key-mobile_navigation {display:block; margin:.25rem 0 .65rem}
+  .st-key-mobile_navigation [data-testid="stPopover"] > button {
+    width:100%; justify-content:space-between; min-height:42px;
+    background:var(--surface); color:var(--ink); border:1px solid var(--border);
+    box-shadow:var(--shadow-sm)}
+  .st-key-mobile_navigation [data-testid="stPopover"] > button:hover {
+    background:var(--surface-2); color:var(--ink); border-color:var(--border)}
   .st-key-top_navigation .nav-user {justify-content:flex-start}
   .st-key-top_navigation div.stButton > button {width:auto; padding-left:12px; padding-right:12px}
   .brand-logo {width:112px}
@@ -355,6 +355,19 @@ def _top_bar(eyebrow_text: str, icon_name: str) -> None:
             else:
                 clicked = st.button("Gelap", icon=":material/dark_mode:", type="tertiary",
                                     key="trustee_theme_toggle", use_container_width=True)
+        with st.container(key="mobile_navigation"):
+            with st.popover(
+                "Navigasi halaman",
+                icon=":material/menu:",
+                use_container_width=True,
+            ):
+                for path, label, item_icon in NAV_ITEMS:
+                    st.page_link(
+                        path,
+                        label=label,
+                        icon=f":material/{item_icon}:",
+                        use_container_width=True,
+                    )
     if clicked:
         st.session_state["theme"] = "light" if is_dark() else "dark"
         st.rerun()
