@@ -246,11 +246,13 @@ div.stButton > button[kind="tertiary"]:hover {background:var(--surface-2); color
       min-width:0 !important}
   .st-key-mobile_navigation {display:block; margin:.25rem 0 .65rem}
   .st-key-mobile_navigation [data-testid="stPopover"] > button {
-    width:100%; justify-content:space-between; min-height:42px;
+    width:100%; justify-content:flex-start; min-height:42px;
     background:var(--surface); color:var(--ink); border:1px solid var(--border);
     box-shadow:var(--shadow-sm)}
   .st-key-mobile_navigation [data-testid="stPopover"] > button:hover {
     background:var(--surface-2); color:var(--ink); border-color:var(--border)}
+  [data-testid="stPopoverBody"] [data-testid="stPageLink"] a {
+    justify-content:flex-start; text-align:left}
   .st-key-top_navigation .nav-user {justify-content:flex-start}
   .st-key-top_navigation div.stButton > button {width:auto; padding-left:12px; padding-right:12px}
   .brand-logo {width:112px}
